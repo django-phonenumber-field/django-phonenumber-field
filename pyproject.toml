@@ -36,6 +36,7 @@ dynamic = ["version"]
 dependencies = ["Django>=4.2"]
 
 [project.optional-dependencies]
+babel = ["Babel"]
 phonenumbers = ["phonenumbers >= 7.0.2"]
 phonenumberslite = ["phonenumberslite >= 7.0.2"]
 
