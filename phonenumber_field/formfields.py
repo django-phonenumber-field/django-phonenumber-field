@@ -73,6 +73,7 @@ class PhoneNumberField(CharField):
     def to_python(self, value):
         if value in validators.EMPTY_VALUES:
             return self.empty_value
+        value = super().to_python(value)
         return to_python(value, region=self.region)
 
 

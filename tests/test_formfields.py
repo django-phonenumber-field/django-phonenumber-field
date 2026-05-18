@@ -149,6 +149,13 @@ class PhoneNumberFormFieldTest(SimpleTestCase):
         form = TestForm({"phone": "1010"})
         self.assertIs(form.is_valid(), True)
 
+    def test_whitespace_is_stripped(self):
+        class PhoneNumberForm(forms.Form):
+            number = PhoneNumberField(required=False)
+
+        form = PhoneNumberForm({"number": " "})
+        self.assertIs(form.is_valid(), True)
+
 
 class SplitPhoneNumberFormFieldTest(SimpleTestCase):
     def example_number(self, region_code: str) -> PhoneNumber:
