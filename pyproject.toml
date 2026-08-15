@@ -15,7 +15,6 @@ license = "MIT"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Framework :: Django",
-    "Framework :: Django :: 4.2",
     "Framework :: Django :: 5.2",
     "Framework :: Django :: 6.0",
     "Intended Audience :: Developers",
@@ -32,7 +31,7 @@ classifiers = [
     "Topic :: Internet :: WWW/HTTP",
 ]
 dynamic = ["version"]
-dependencies = ["Django>=4.2"]
+dependencies = ["Django>=5.2"]
 
 [project.optional-dependencies]
 babel = ["Babel"]
