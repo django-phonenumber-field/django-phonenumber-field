@@ -1,4 +1,3 @@
-import django
 import phonenumbers
 from django import forms
 from django.core import checks
@@ -675,41 +674,21 @@ class RegionPhoneNumberModelFieldTest(TestCase):
     def test_region_field_renders_invalid_numbers(self):
         form = ARPhoneNumberForm({"phone": "abcdef"})
         self.assertFalse(form.is_valid())
-        if django.VERSION >= (5, 2):
-            self.assertHTMLEqual(
-                form.as_p(),
-                '<ul class="errorlist" id="id_phone_error">'
-                "<li>Enter a valid phone number (e.g. 011 2345-6789) "
-                "or a number with an international call prefix.</li>"
-                "</ul>"
-                "<p>"
-                '<label for="id_phone">Phone:</label>'
-                "<input "
-                'type="tel" '
-                'name="phone" '
-                'value="abcdef" '
-                'maxlength="128" '
-                'aria-describedby="id_phone_error" '
-                'aria-invalid="true" '
-                'id="id_phone">'
-                "</p>",
-            )
-        else:
-            aria_invalid = "" if django.VERSION[0] < 5 else 'aria-invalid="true" '
-            self.assertHTMLEqual(
-                form.as_p(),
-                '<ul class="errorlist">'
-                "<li>Enter a valid phone number (e.g. 011 2345-6789) "
-                "or a number with an international call prefix.</li>"
-                "</ul>"
-                "<p>"
-                '<label for="id_phone">Phone:</label>'
-                "<input "
-                'type="tel" '
-                'name="phone" '
-                'value="abcdef" '
-                'maxlength="128" '
-                f"{aria_invalid}"
-                'id="id_phone">'
-                "</p>",
-            )
+        self.assertHTMLEqual(
+            form.as_p(),
+            '<ul class="errorlist" id="id_phone_error">'
+            "<li>Enter a valid phone number (e.g. 011 2345-6789) "
+            "or a number with an international call prefix.</li>"
+            "</ul>"
+            "<p>"
+            '<label for="id_phone">Phone:</label>'
+            "<input "
+            'type="tel" '
+            'name="phone" '
+            'value="abcdef" '
+            'maxlength="128" '
+            'aria-describedby="id_phone_error" '
+            'aria-invalid="true" '
+            'id="id_phone">'
+            "</p>",
+        )

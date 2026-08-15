@@ -1,6 +1,5 @@
 from unittest import mock
 
-import django
 import phonenumbers
 from django import forms
 from django.core.exceptions import ImproperlyConfigured
@@ -266,24 +265,17 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
         form = TestForm(data={"phone_0": "", "phone_1": invalid_national_number})
         self.assertFalse(form.is_valid())
         rendered_form = form.as_ul()
-        if django.VERSION >= (5, 2):
-            self.assertInHTML(
-                """<ul class="errorlist" id="id_phone_error">
-                <li>This field is required.</li>
-                </ul>
-                """,
-                rendered_form,
-            )
-        else:
-            self.assertInHTML(
-                '<ul class="errorlist"><li>This field is required.</li></ul>',
-                rendered_form,
-            )
-        aria_invalid = "" if django.VERSION[0] < 5 else 'aria-invalid="true" '
+        self.assertInHTML(
+            """<ul class="errorlist" id="id_phone_error">
+            <li>This field is required.</li>
+            </ul>
+            """,
+            rendered_form,
+        )
         # Keeps national number input.
         self.assertInHTML(
             '<input type="tel" name="phone_1" '
-            f'value="{invalid_national_number}" {aria_invalid} required '
+            f'value="{invalid_national_number}" aria-invalid="true" required '
             'id="id_phone_1">',
             rendered_form,
             count=1,
@@ -301,23 +293,16 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
         form = TestForm(data={"phone_0": "CA", "phone_1": ""})
         self.assertFalse(form.is_valid())
         rendered_form = form.as_ul()
-        if django.VERSION >= (5, 2):
-            self.assertInHTML(
-                """
-                <ul class="errorlist" id="id_phone_error">
-                <li>This field is required.</li>
-                </ul>
-                """,
-                rendered_form,
-            )
-        else:
-            self.assertInHTML(
-                '<ul class="errorlist"><li>This field is required.</li></ul>',
-                rendered_form,
-            )
-        aria_invalid = "" if django.VERSION[0] < 5 else 'aria-invalid="true" '
         self.assertInHTML(
-            f'<input type="tel" name="phone_1" {aria_invalid} '
+            """
+            <ul class="errorlist" id="id_phone_error">
+            <li>This field is required.</li>
+            </ul>
+            """,
+            rendered_form,
+        )
+        self.assertInHTML(
+            '<input type="tel" name="phone_1" aria-invalid="true" '
             'required id="id_phone_1">',
             rendered_form,
             count=1,
@@ -338,23 +323,16 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
         form = TestForm(data={"phone_1": "654321"})
         self.assertFalse(form.is_valid())
         rendered_form = form.as_ul()
-        if django.VERSION >= (5, 2):
-            self.assertInHTML(
-                """
-                <ul class="errorlist" id="id_phone_error">
-                <li>This field is required.</li>
-                </ul>
-                """,
-                rendered_form,
-            )
-        else:
-            self.assertInHTML(
-                '<ul class="errorlist"><li>This field is required.</li></ul>',
-                rendered_form,
-            )
-        aria_invalid = "" if django.VERSION[0] < 5 else 'aria-invalid="true" '
         self.assertInHTML(
-            f'<input type="tel" name="phone_1" value="654321" {aria_invalid} '
+            """
+            <ul class="errorlist" id="id_phone_error">
+            <li>This field is required.</li>
+            </ul>
+            """,
+            rendered_form,
+        )
+        self.assertInHTML(
+            '<input type="tel" name="phone_1" value="654321" aria-invalid="true" '
             'required id="id_phone_1">',
             rendered_form,
             count=1,
@@ -372,25 +350,17 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
         form = TestForm(data={"phone_0": "CA"})
         self.assertFalse(form.is_valid())
         rendered_form = form.as_ul()
-        if django.VERSION >= (5, 2):
-            self.assertInHTML(
-                """
-                <ul class="errorlist" id="id_phone_error">
-                <li>This field is required.</li>
-                </ul>
-                """,
-                rendered_form,
-                count=1,
-            )
-        else:
-            self.assertInHTML(
-                '<ul class="errorlist"><li>This field is required.</li></ul>',
-                rendered_form,
-                count=1,
-            )
-        aria_invalid = "" if django.VERSION[0] < 5 else 'aria-invalid="true" '
         self.assertInHTML(
-            f'<input type="tel" name="phone_1" {aria_invalid} '
+            """
+            <ul class="errorlist" id="id_phone_error">
+            <li>This field is required.</li>
+            </ul>
+            """,
+            rendered_form,
+            count=1,
+        )
+        self.assertInHTML(
+            '<input type="tel" name="phone_1" aria-invalid="true" '
             'required id="id_phone_1">',
             rendered_form,
             count=1,
@@ -421,25 +391,17 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
         form = TestForm(data={"phone_0": "CA", "phone_1": "0000"})
         self.assertFalse(form.is_valid())
         rendered_form = str(form)
-        if django.VERSION >= (5, 2):
-            self.assertInHTML(
-                """
-                <ul class="errorlist" id="id_phone_error">
-                <li>Enter a valid phone number (e.g. (506) 234-5678).</li>
-                </ul>
-                """,
-                rendered_form,
-                count=1,
-            )
-        else:
-            self.assertInHTML(
-                '<ul class="errorlist">'
-                "<li>Enter a valid phone number (e.g. (506) 234-5678).</li></ul>",
-                rendered_form,
-            )
-        aria_invalid = "" if django.VERSION[0] < 5 else 'aria-invalid="true" '
         self.assertInHTML(
-            f'<input type="tel" name="phone_1" value="0000" {aria_invalid} '
+            """
+            <ul class="errorlist" id="id_phone_error">
+            <li>Enter a valid phone number (e.g. (506) 234-5678).</li>
+            </ul>
+            """,
+            rendered_form,
+            count=1,
+        )
+        self.assertInHTML(
+            '<input type="tel" name="phone_1" value="0000" aria-invalid="true" '
             'required id="id_phone_1">',
             rendered_form,
             count=1,
@@ -494,38 +456,23 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
             phone = SplitPhoneNumberFieldWithCountries()
 
         form = TestForm()
-        if django.VERSION[0] < 4:
-            self.assertHTMLEqual(
-                str(form.as_p()),
-                """
-                <p>
-                <label for="id_phone_0">Phone:</label>
-                <select id="id_phone_0" name="phone_0" required>
-                    <option value="FR">France</option>
-                    <option value="BE">Belgium</option>
-                </select>
-                <input id="id_phone_1" name="phone_1" required type="tel">
-                </p>
-                """,
-            )
-        else:
-            self.assertHTMLEqual(
-                form.as_div(),
-                """
-                <div>
-                <fieldset>
-                <legend>
-                Phone:
-                </legend>
-                <select id="id_phone_0" name="phone_0" required>
-                    <option value="FR">France</option>
-                    <option value="BE">Belgium</option>
-                </select>
-                <input id="id_phone_1" name="phone_1" required type="tel">
-                </fieldset>
-                </div>
-                """,
-            )
+        self.assertHTMLEqual(
+            form.as_div(),
+            """
+            <div>
+            <fieldset>
+            <legend>
+            Phone:
+            </legend>
+            <select id="id_phone_0" name="phone_0" required>
+                <option value="FR">France</option>
+                <option value="BE">Belgium</option>
+            </select>
+            <input id="id_phone_1" name="phone_1" required type="tel">
+            </fieldset>
+            </div>
+            """,
+        )
 
     def test_invalid_region(self):
         class PhoneNumberForm(forms.Form):
@@ -556,56 +503,30 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
             {"name": ["Ensure this value has at least 4 characters (it has 1)."]},
         )
         form_html = form.as_p()
-        if django.VERSION >= (5, 2):
-            self.assertInHTML(
-                """
-                <ul class="errorlist" id="id_name_error">
-                    <li>
-                    Ensure this value has at least 4 characters (it has 1).
-                    </li>
-                </ul>
-                <p>
-                    <label for="id_name">Name:</label>
-                    <input
-                       id="id_name"
-                       maxlength="100"
-                       minlength="4"
-                       name="name"
-                       aria-describedby="id_name_error"
-                       aria-invalid="true"
-                       required
-                       type="text"
-                       value="a">
-                </p>
-                """,
-                form_html,
-                count=1,
-            )
-        else:
-            aria_invalid = "" if django.VERSION[0] < 5 else 'aria-invalid="true" '
-            self.assertInHTML(
-                f"""
-                <ul class="errorlist">
-                    <li>
-                    Ensure this value has at least 4 characters (it has 1).
-                    </li>
-                </ul>
-                <p>
-                    <label for="id_name">Name:</label>
-                    <input
-                       id="id_name"
-                       maxlength="100"
-                       minlength="4"
-                       name="name"
-                       {aria_invalid}
-                       required
-                       type="text"
-                       value="a">
-                </p>
-                """,
-                form_html,
-                count=1,
-            )
+        self.assertInHTML(
+            """
+            <ul class="errorlist" id="id_name_error">
+                <li>
+                Ensure this value has at least 4 characters (it has 1).
+                </li>
+            </ul>
+            <p>
+                <label for="id_name">Name:</label>
+                <input
+                   id="id_name"
+                   maxlength="100"
+                   minlength="4"
+                   name="name"
+                   aria-describedby="id_name_error"
+                   aria-invalid="true"
+                   required
+                   type="text"
+                   value="a">
+            </p>
+            """,
+            form_html,
+            count=1,
+        )
         self.assertInHTML(
             '<option selected value="FR">France +33</option>',
             form_html,
@@ -635,20 +556,12 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
             number = SplitPhoneNumberField()
 
         form = PhoneNumberForm({"number_0": "FR", "number_1": "1"})
-        if django.VERSION >= (5, 2):
-            self.assertIn(
-                '<ul class="errorlist" id="id_number_error"><li>'
-                "Enter a valid phone number (e.g. 01 23 45 67 89)."
-                "</li></ul>",
-                str(form),
-            )
-        else:
-            self.assertIn(
-                '<ul class="errorlist"><li>'
-                "Enter a valid phone number (e.g. 01 23 45 67 89)."
-                "</li></ul>",
-                str(form),
-            )
+        self.assertIn(
+            '<ul class="errorlist" id="id_number_error"><li>'
+            "Enter a valid phone number (e.g. 01 23 45 67 89)."
+            "</li></ul>",
+            str(form),
+        )
 
     def test_customize_invalid_error_message(self):
         class CustomSplitPhoneNumberField(SplitPhoneNumberField):
@@ -659,21 +572,15 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
             phone = CustomSplitPhoneNumberField()
 
         form = TestForm({"phone_0": "FR", "phone_1": "1"})
-        if django.VERSION >= (5, 2):
-            self.assertInHTML(
-                """
-                <ul class="errorlist" id="id_phone_error">
-                <li>My message using 01 23 45 67 89.</li>
-                </ul>
-                """,
-                str(form),
-                count=1,
-            )
-        else:
-            self.assertIn(
-                '<ul class="errorlist"><li>My message using 01 23 45 67 89.</li></ul>',
-                str(form),
-            )
+        self.assertInHTML(
+            """
+            <ul class="errorlist" id="id_phone_error">
+            <li>My message using 01 23 45 67 89.</li>
+            </ul>
+            """,
+            str(form),
+            count=1,
+        )
 
     def test_clean_handles_invalid_input(self):
         data = [
