@@ -1,4 +1,5 @@
 name: Upload release to PyPI
+permissions: {}
 on:
   release:
     types: [published]
