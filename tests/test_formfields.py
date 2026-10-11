@@ -101,9 +101,20 @@ class PhoneNumberFormFieldTest(SimpleTestCase):
             """
             <p>
             <label for="id_phone">Phone:</label>
-            <input id="id_phone" name="phone" required type="tel" value="+33612345678">
+            <input id="id_phone" name="phone" required type="text" value="+33612345678">
             </p>
             """,
+        )
+
+    def test_hidden_widget(self):
+        class TestForm(forms.Form):
+            phone = PhoneNumberField(widget=forms.HiddenInput)
+
+        form = TestForm({"phone": "+33612345678"})
+        self.assertIs(form["phone"].is_hidden, True)
+        self.assertHTMLEqual(
+            str(form["phone"]),
+            '<input type="hidden" name="phone" value="+33612345678" id="id_phone">',
         )
 
     @override_settings(PHONENUMBER_DEFAULT_REGION="FR")

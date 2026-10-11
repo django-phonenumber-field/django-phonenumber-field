@@ -49,7 +49,6 @@ class PhoneNumberField(CharField):
                 widget = self.widget()
 
         super().__init__(*args, widget=widget, **kwargs)
-        self.widget.input_type = "tel"
 
         if "invalid" not in self.error_messages:
             if self.region:
